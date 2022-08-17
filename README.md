@@ -55,7 +55,7 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 - Docker installed to run locally;
 
-$ docker-compose up
+    $ docker-compose up
 
 ## Running the project local
 
