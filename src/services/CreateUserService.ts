@@ -10,8 +10,13 @@ interface Request{
     password: string;
 }
 
+interface Response {
+    user: User
+    token: string
+}
+
 class CreateUserService {
-    public async execute({name, email, password}: Request): Promise<User>{
+    public async execute({name, email, password}: Request): Promise<Response>{
         const userRepo = getRepository(User);
         const checkUserEmailExist = await userRepo.findOne({
             where: {email}
@@ -39,7 +44,7 @@ class CreateUserService {
             expiresIn,
         });
 
-        return user;
+        return {user, token};
     }
 }
 
