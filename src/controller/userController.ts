@@ -44,16 +44,12 @@ const createUserController = async (req: Request, res: Response) => {
     const { email, name, password } = req.body;
     const createUser = new CreateUserService;
     try {
-        await createUser.execute({
+        const user = await createUser.execute({
             email,
             name,
             password
         })
-        const authUser = new AuthUserService;
-        const user  = await authUser.execute({
-            email,
-            password
-        })
+
         return res.status(201).json(user)
     } catch (error: Error | any) {
         return res.status(400).json({error: error.message})
