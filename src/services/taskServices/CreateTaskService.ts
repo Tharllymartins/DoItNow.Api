@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm"
-import Tag from "../models/Tag";
-import Task from "../models/Task";
+import Tag from "../../models/Tag";
+import Task from "../../models/Task";
 
 
 interface Request {

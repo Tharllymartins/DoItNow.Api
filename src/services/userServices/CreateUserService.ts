@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
 import { hash } from "bcryptjs";
-import User from "../models/User";
-import auth from "../config/auth";
+import User from "../../models/User";
+import auth from "../../config/auth";
 import {sign} from "jsonwebtoken";
 
 interface Request{
