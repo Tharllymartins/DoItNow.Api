@@ -1,16 +1,14 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import User from "../models/User";
-import AuthUserService from "../services/AuthUserService";
-import CreateUserService from "../services/CreateUserService";
-import UpdatedUserAvatarService from "../services/UpdatedUserAvatarService";
-import { hash } from "bcryptjs";
-import crypto from "crypto";
-import nodemailer from "nodemailer";
-import ForgotUserPassword from "../services/ForgotUserPasswordService";
+import AuthUserService from "../services/userServices/AuthUserService";
+import CreateUserService from "../services/userServices/CreateUserService";
+import UpdatedUserAvatarService from "../services/userServices/UpdatedUserAvatarService";
+import ForgotUserPassword from "../services/userServices/ForgotUserPasswordService";
+import ChangeUserPasswordService from "../services/userServices/ChangePasswordService";
 
 
-const getUserController = async (req: Request, res: Response) => {
+export const getUserController = async (req: Request, res: Response) => {
 
     try {
         const id = req.user.id;
@@ -33,7 +31,7 @@ const getUserController = async (req: Request, res: Response) => {
 
 }
 
-const authUserController = async (req: Request, res: Response) => {
+export const authUserController = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
         const authUser = new AuthUserService;
@@ -50,7 +48,7 @@ const authUserController = async (req: Request, res: Response) => {
     }
 }
 
-const createUserController = async (req: Request, res: Response) => {
+export const createUserController = async (req: Request, res: Response) => {
     try {
         const { email, name, password } = req.body;
         const createUser = new CreateUserService;
@@ -66,7 +64,7 @@ const createUserController = async (req: Request, res: Response) => {
     }
 }
 
-const uploadUserAvatarController = async (req: Request, res: Response) => {
+export const uploadUserAvatarController = async (req: Request, res: Response) => {
     try {
         const updateUserAvatar = new UpdatedUserAvatarService();
         const user = await updateUserAvatar.execute({
@@ -82,7 +80,7 @@ const uploadUserAvatarController = async (req: Request, res: Response) => {
     }
 }
 
-const forgotUserPasswordController = async (req: Request, res: Response) => {
+export const forgotUserPasswordController = async (req: Request, res: Response) => {
     try {
         const { email } = req.body;
         const forgotUserPasswordService = new ForgotUserPassword()
@@ -94,10 +92,21 @@ const forgotUserPasswordController = async (req: Request, res: Response) => {
     }
 }
 
-export {
-    getUserController,
-    authUserController,
-    createUserController,
-    uploadUserAvatarController,
-    forgotUserPasswordController
+export const changePasswordController = async (req: Request, res: Response) => {
+    try {
+        const {email, oldPassword, newPassword} = req.body;
+
+        const changePasswordService = new ChangeUserPasswordService();
+
+        await changePasswordService.execute({
+            email,
+            newPassword,
+            oldPassword
+        })
+
+        return res.send("success!")
+
+    } catch (error: Error | any) {
+        return res.status(400).json({error: error.message})
+    }
 }
