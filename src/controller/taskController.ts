@@ -4,11 +4,11 @@ import SubTask from "../models/SubTask";
 import Tag from "../models/Tag";
 import Task from "../models/Task";
 import TaskRepo from "../repositories/taskRepository";
-import CreateTaskService from "../services/CreateTaskService";
+import CreateTaskService from "../services/taskServices/CreateTaskService";
 
 
 // Controllers to get information
-const getTasks = async (req: Request, res: Response) => {
+export const getTasks = async (req: Request, res: Response) => {
     const taskRepo = getCustomRepository(TaskRepo);
     const user_id = req.user.id;
     const {status} = req.query;
@@ -39,7 +39,7 @@ const getTasks = async (req: Request, res: Response) => {
 
 }
 
-const getTasksByTag = async (req: Request, res: Response) => {
+export const getTasksByTag = async (req: Request, res: Response) => {
     const { tagId } = req.params;
     const taskRepo = getCustomRepository(TaskRepo);
     try {
@@ -57,7 +57,7 @@ const getTasksByTag = async (req: Request, res: Response) => {
     }
 }
 
-const getTags = async (req: Request, res: Response) => {
+export const getTags = async (req: Request, res: Response) => {
     const tagRepo = getRepository(Tag);
     const userId = req.user.id;
     try {
@@ -75,7 +75,7 @@ const getTags = async (req: Request, res: Response) => {
 }
 
 // Controllers to create data
-const createTask = async (req: Request, res: Response) => {
+export const createTask = async (req: Request, res: Response) => {
     const { name, tagId } = req.body;
     const { id } = req.user;
     const createTaskService = new CreateTaskService;
@@ -92,7 +92,7 @@ const createTask = async (req: Request, res: Response) => {
     }
 }
 
-const createSubTask = async (req: Request, res: Response) => {
+export const createSubTask = async (req: Request, res: Response) => {
     const { name, status } = req.body;
     const { taskId }: any = req.params;
     const subTaskRepo = getRepository(SubTask)
@@ -120,7 +120,7 @@ const createSubTask = async (req: Request, res: Response) => {
 
 }
 
-const createTag = async (req: Request, res: Response) => {
+export const createTag = async (req: Request, res: Response) => {
     const { name } = req.body;
     const userId = req.user.id;
     const tagRepo = getRepository(Tag);
@@ -140,7 +140,7 @@ const createTag = async (req: Request, res: Response) => {
 }
 
 // Controllers to update data
-const updateTask = async (req: Request, res: Response) => {
+export const updateTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const data = req.body;
     const taskRepo = getRepository(Task);
@@ -158,7 +158,7 @@ const updateTask = async (req: Request, res: Response) => {
     }
 }
 
-const updateSubTask =  async (req: Request, res: Response) => {
+export const updateSubTask =  async (req: Request, res: Response) => {
     const { id } = req.params;
     const data = req.body;
     const subtaskRepo = getRepository(SubTask);
@@ -176,7 +176,7 @@ const updateSubTask =  async (req: Request, res: Response) => {
     }
 }
 
-const updateTag = async (req: Request, res: Response) => {
+export const updateTag = async (req: Request, res: Response) => {
     const {tagId} = req.params;
     const data = req.body;
     const tagRepo = getRepository(Tag);
@@ -194,7 +194,7 @@ const updateTag = async (req: Request, res: Response) => {
 }
 
 // Controllers to delete data
-const deleteTask = async (req: Request, res: Response) => {
+export const deleteTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const taskRepo = getRepository(Task);
     try {
@@ -205,7 +205,7 @@ const deleteTask = async (req: Request, res: Response) => {
     }
 }
 
-const deleteSubTask = async (req: Request, res: Response) => {
+export const deleteSubTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const subtaskRepo = getRepository(SubTask)
     try {
@@ -216,7 +216,7 @@ const deleteSubTask = async (req: Request, res: Response) => {
     }
 }
 
-const deleteTag = async (req: Request, res: Response) => {
+export const deleteTag = async (req: Request, res: Response) => {
     const { id } = req.params;
     const tagrepo = getRepository(Tag);
     try {
@@ -227,25 +227,4 @@ const deleteTag = async (req: Request, res: Response) => {
         return res.status(400).send()
     }
 
-}
-
-
-
-
-
-
-
-export {
-    getTasks,
-    getTasksByTag,
-    getTags,
-    createTask,
-    createTag,
-    updateTask,
-    updateTag,
-    deleteTask,
-    createSubTask,
-    updateSubTask,
-    deleteSubTask,
-    deleteTag
 }
