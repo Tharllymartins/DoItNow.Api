@@ -9,6 +9,8 @@ interface Request {
     avatarFileName?: string;
 }
 
+/* This class is responsible for updating the user avatar, and it does so by finding the user, deleting
+the old avatar, and saving the new avatar. */
 class UpdatedUserAvatarService {
     public async execute({ user_id, avatarFileName }: Request): Promise<User>{
         const userRepo = getRepository(User);

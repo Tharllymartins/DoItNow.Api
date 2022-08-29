@@ -84,7 +84,7 @@ export const forgotUserPasswordController = async (req: Request, res: Response) 
     try {
         const { email } = req.body;
         const forgotUserPasswordService = new ForgotUserPassword()
-        const passwordChanged = await forgotUserPasswordService.execute({email})
+        await forgotUserPasswordService.execute({email})
 
         return res.send("success!")
     } catch (error: Error | any) {
@@ -94,14 +94,14 @@ export const forgotUserPasswordController = async (req: Request, res: Response) 
 
 export const changePasswordController = async (req: Request, res: Response) => {
     try {
-        const {email, oldPassword, newPassword} = req.body;
+        const {email, currentPassword, newPassword} = req.body;
 
         const changePasswordService = new ChangeUserPasswordService();
 
         await changePasswordService.execute({
             email,
             newPassword,
-            oldPassword
+            currentPassword
         })
 
         return res.send("success!")

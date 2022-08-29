@@ -9,6 +9,8 @@ interface Request {
     email: string;
 }
 
+/* It receives an e-mail, searches for the user in the database, generates a new password, sends it to
+the user's e-mail and updates the database with the new password. */
 export default class ForgotUserPassword {
     public async execute({email}: Request){
 
