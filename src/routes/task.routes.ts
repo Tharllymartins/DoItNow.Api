@@ -11,9 +11,8 @@ taskRouter.use(ensureAutheticated)
 // Route to get tasks
 taskRouter.get("/", getTasks);
 taskRouter.get("/tag", getTags)
-taskRouter.get("/tag/:tagId", getTasksByTag)
 // Routes to create data (task, subtask)
-taskRouter.post("/create", createTask);
+taskRouter.post("/", createTask);
 taskRouter.post("/:taskId/subtask", createSubTask);
 taskRouter.post("/tag", createTag);
 // Routes to update data (task, subtask)
