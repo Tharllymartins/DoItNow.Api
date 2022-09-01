@@ -5,34 +5,31 @@ import TaskRepo from "../repositories/taskRepository";
 import CreateTaskService from "../services/taskServices/CreateTaskService";
 
 
-/**
- * It gets all the tasks for a user, and then it gets an overview of the tasks.
- * @param {Request} req - Request - the request object
- * @param {Response} res - Response - the response object
- * @returns An array of tasks and an object with the overView of the tasks.
- */
+
+/* It gets all the tasks from the database that match the query parameters. */
 export const getTasks = async (req: Request, res: Response) => {
     try {
         const taskRepo = getCustomRepository(TaskRepo);
         const user_id = req.user.id;
-        const { status } = req.query;
-        let tasks: Task[] = []
+        const { status, tag } = req.query;
         const statusTypes = ["To do", "Doing", "Done"]
+        let query = {}
+
+        if (user_id) {
+            Object.assign(query, { user_id })
+        }
+
+        if (tag) {
+            Object.assign(query, { tagId: tag })
+        }
 
         if (status) {
-            tasks = await taskRepo.find({
-                where: {
-                    user_id,
-                    status: statusTypes[+status]
-                }
-            })
-        } else {
-            tasks = await taskRepo.find({
-                where: {
-                    user_id
-                }
-            })
+            Object.assign(query, { status: statusTypes[+status] })
         }
+
+        const tasks = await taskRepo.find({
+            where: query
+        })
 
         const overView = taskRepo.overView(tasks);
 
@@ -43,11 +40,7 @@ export const getTasks = async (req: Request, res: Response) => {
 
 }
 
-/**
- * It gets all tasks by tagId and returns the tasks and an overview of the tasks.
- * @param {Request} req - Request - the request object
- * @param {Response} res - Response - the response object
- */
+/* It gets all tasks by tagId and returns the tasks and an overview of the tasks. */
 export const getTasksByTag = async (req: Request, res: Response) => {
     const { tagId } = req.params;
     const taskRepo = getCustomRepository(TaskRepo);
@@ -67,12 +60,7 @@ export const getTasksByTag = async (req: Request, res: Response) => {
 }
 
 
-/**
- * It creates a task.
- * @param {Request} req - Request - The request object
- * @param {Response} res - Response - the response object
- * @returns a response with a status code of 201 and an empty body.
- */
+/* It creates a task. */
 export const createTask = async (req: Request, res: Response) => {
     const { name, tagId } = req.body;
     const { id } = req.user;
@@ -118,10 +106,7 @@ export const updateTask = async (req: Request, res: Response) => {
 }
 
 
-
-
-
-// Controllers to delete data
+/* It deletes a task from the database by its id. */
 export const deleteTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const taskRepo = getRepository(Task);
