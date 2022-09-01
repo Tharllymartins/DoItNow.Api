@@ -508,6 +508,17 @@
                         }
                     }
                 },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "taskId",
+                        "required": true,
+                        "description": "Id of a task",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created"
