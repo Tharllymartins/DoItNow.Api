@@ -1,44 +1,46 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import { getCustomRepository, getRepository } from "typeorm";
-import SubTask from "../models/SubTask";
-import Tag from "../models/Tag";
 import Task from "../models/Task";
 import TaskRepo from "../repositories/taskRepository";
 import CreateTaskService from "../services/taskServices/CreateTaskService";
 
 
-// Controllers to get information
-export const getTasks = async (req: Request, res: Response) => {
-    const taskRepo = getCustomRepository(TaskRepo);
-    const user_id = req.user.id;
-    const {status} = req.query;
-    let tasks: Task[] = []
 
+/* It gets all the tasks from the database that match the query parameters. */
+export const getTasks = async (req: Request, res: Response) => {
     try {
-        if(status) {
-            tasks = await taskRepo.find({
-                where: {
-                    user_id,
-                    status
-                }
-            })
-        } else {
-            tasks = await taskRepo.find({
-                where: {
-                    user_id
-                }
-            })
+        const taskRepo = getCustomRepository(TaskRepo);
+        const user_id = req.user.id;
+        const { status, tag } = req.query;
+        const statusTypes = ["To do", "Doing", "Done"]
+        let query = {}
+
+        if (user_id) {
+            Object.assign(query, { user_id })
         }
-    
+
+        if (tag) {
+            Object.assign(query, { tagId: tag })
+        }
+
+        if (status) {
+            Object.assign(query, { status: statusTypes[+status] })
+        }
+
+        const tasks = await taskRepo.find({
+            where: query
+        })
+
         const overView = taskRepo.overView(tasks);
-    
-        return res.json({tasks, overView}); 
+
+        return res.json({ tasks, overView });
     } catch (error) {
         return res.status(400).send()
     }
 
 }
 
+/* It gets all tasks by tagId and returns the tasks and an overview of the tasks. */
 export const getTasksByTag = async (req: Request, res: Response) => {
     const { tagId } = req.params;
     const taskRepo = getCustomRepository(TaskRepo);
@@ -50,31 +52,15 @@ export const getTasksByTag = async (req: Request, res: Response) => {
         })
 
         const overView = taskRepo.overView(tasks)
-    
-        return res.json({tasks, overView})
+
+        return res.json({ tasks, overView })
     } catch (error) {
         return res.status(400).send()
     }
 }
 
-export const getTags = async (req: Request, res: Response) => {
-    const tagRepo = getRepository(Tag);
-    const userId = req.user.id;
-    try {
-        const tags = await tagRepo.find({
-            where: {
-                userId
-            }
-        })
 
-        return res.json(tags);
-    } catch (error) {
-        return res.status(400).send()
-    }
-    
-}
-
-// Controllers to create data
+/* It creates a task. */
 export const createTask = async (req: Request, res: Response) => {
     const { name, tagId } = req.body;
     const { id } = req.user;
@@ -85,61 +71,22 @@ export const createTask = async (req: Request, res: Response) => {
             id,
             tagId
         })
-    
+
         return res.status(201).send()
     } catch (error) {
         return res.status(400).json()
     }
 }
 
-export const createSubTask = async (req: Request, res: Response) => {
-    const { name, status } = req.body;
-    const { taskId }: any = req.params;
-    const subTaskRepo = getRepository(SubTask)
-    const taskRepo = getRepository(Task)
 
-    try {
-
-        const task = await taskRepo.findOne({where:{id: taskId}})
-
-        if(!task) {
-            return res.status(400).json({error: "Task not found"})
-        }
-        const subTask = subTaskRepo.create({
-            name,
-            status,
-            taskId
-        })
-    
-        await subTaskRepo.save(subTask);
-    
-        return res.status(201).json(subTask)
-    } catch (error) {
-        return res.status(400).send()
-    }
-
-}
-
-export const createTag = async (req: Request, res: Response) => {
-    const { name } = req.body;
-    const userId = req.user.id;
-    const tagRepo = getRepository(Tag);
-
-    try {
-        const tag = tagRepo.create({
-            name,
-            userId
-        })
-
-        await tagRepo.save(tag)
-
-        return res.json(tag)
-    } catch (error) {
-        return res.status(400).json({error: "Error"})
-    }
-}
-
-// Controllers to update data
+/**
+ * It takes the id of the task to be updated from the request params, the data to be updated from the
+ * request body, gets the task repository, finds the task with the given id, updates the task with the
+ * given data and returns a 202 response if successful or a 400 response if not.
+ * @param {Request} req - Request - The request object
+ * @param {Response} res - Response - The response object that will be sent back to the client.
+ * @returns The updated task
+ */
 export const updateTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const data = req.body;
@@ -148,7 +95,7 @@ export const updateTask = async (req: Request, res: Response) => {
     try {
         const task = await taskRepo.findOne(id)
         if (!task) {
-            return res.status(400).json({msg: "Task not found"})
+            return res.status(400).json({ msg: "Task not found" })
         }
         await taskRepo.update(id, data)
 
@@ -158,42 +105,8 @@ export const updateTask = async (req: Request, res: Response) => {
     }
 }
 
-export const updateSubTask =  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const data = req.body;
-    const subtaskRepo = getRepository(SubTask);
 
-    try {
-        const subTask = await subtaskRepo.findOne(id);
-        if(!subTask) {
-            return res.status(400).json({msg: "Subtask not found!"})
-        }
-        await subtaskRepo.update(id, data)
-        
-        return res.status(202).send();
-    } catch (error: Error | any) {
-        return res.status(400).json({error: error.message})
-    }
-}
-
-export const updateTag = async (req: Request, res: Response) => {
-    const {tagId} = req.params;
-    const data = req.body;
-    const tagRepo = getRepository(Tag);
-
-    try {
-        const tag = await tagRepo.findOne(tagId);
-        if(!tag){
-            return res.status(400).json({error: "Tag not found!"});
-        }
-        await tagRepo.update(tagId, data)
-        return res.status(202).send();
-    } catch (error) {
-        return res.status(400);
-    }
-}
-
-// Controllers to delete data
+/* It deletes a task from the database by its id. */
 export const deleteTask = async (req: Request, res: Response) => {
     const { id } = req.params;
     const taskRepo = getRepository(Task);
@@ -201,30 +114,8 @@ export const deleteTask = async (req: Request, res: Response) => {
         taskRepo.delete(id)
         return res.status(202).json()
     } catch (error) {
-        return res.status(400).json({error: error})
+        return res.status(400).json({ error: error })
     }
 }
 
-export const deleteSubTask = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const subtaskRepo = getRepository(SubTask)
-    try {
-        subtaskRepo.delete(id)
-        return res.status(202).json()
-    } catch (error) {
-        return res.status(400).json({error: error})
-    }
-}
 
-export const deleteTag = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const tagrepo = getRepository(Tag);
-    try {
-        tagrepo.delete(id);
-
-        return res.status(204).json()
-    } catch (error) {
-        return res.status(400).send()
-    }
-
-}

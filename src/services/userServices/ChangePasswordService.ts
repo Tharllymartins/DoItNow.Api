@@ -5,12 +5,14 @@ import { compare, hash } from "bcryptjs";
 
 interface Request {
     email: string;
-    oldPassword: string;
+    currentPassword: string;
     newPassword: string;
 }
 
+/* It receives an email, current password and new password, checks if the email exists, checks if the old
+password matches the one in the database, hashes the new password and updates the user's password */
 export default class ChangeUserPasswordService {
-    public async execute({email, oldPassword, newPassword}: Request){
+    public async execute({email, currentPassword, newPassword}: Request){
 
     const user = await getRepository(User).findOne({
         where: {
@@ -22,9 +24,9 @@ export default class ChangeUserPasswordService {
         throw new Error("This e-mail doesn't exist!")
     }
 
-    const oldPasswordMatch = await compare(oldPassword, user.password!)
+    const currentPasswordMatch = await compare(currentPassword, user.password!)
 
-    if(!oldPasswordMatch) {
+    if(!currentPasswordMatch) {
         throw new Error("Password doesn't match")
     }
 

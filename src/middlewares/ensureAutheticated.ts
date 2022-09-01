@@ -7,7 +7,7 @@ export default function ensureAutheticated(req: Request, res: Response, next: Ne
     const authHeader = req.headers.authorization;
 
     if (!authHeader){
-        throw "JWT token is missing"
+        throw new Error("JWT token is missing")
     }
 
     const [, token] = authHeader.split(' ');
@@ -23,5 +23,4 @@ export default function ensureAutheticated(req: Request, res: Response, next: Ne
     } catch {
         throw new Error("Invalid JWT token");
     }
-    
 }

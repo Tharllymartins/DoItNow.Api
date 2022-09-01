@@ -9,6 +9,7 @@ interface Request {
     tagId?: string;
 }
 
+/* It creates a task and saves it to the database */
 export default class CreateTaskService {
     public async execute({ name, id, tagId }: Request): Promise<Task>{
         const taskRepo = getRepository(Task)

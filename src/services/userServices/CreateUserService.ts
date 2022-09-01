@@ -15,6 +15,7 @@ interface Response {
     token: string
 }
 
+/* It creates a new user and returns the user and a token */
 class CreateUserService {
     public async execute({name, email, password}: Request): Promise<Response>{
         const userRepo = getRepository(User);

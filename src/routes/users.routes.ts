@@ -18,7 +18,7 @@ usersRouter.patch('/avatar', ensureAutheticated, upload.single('avatar'), upload
 
 usersRouter.post("/forgot-password", forgotUserPasswordController)
 
-usersRouter.post("/change-password", changePasswordController)
+usersRouter.patch("/change-password", changePasswordController)
 
 
 export default usersRouter;

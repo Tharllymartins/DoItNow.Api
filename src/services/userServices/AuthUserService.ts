@@ -14,6 +14,8 @@ interface Response {
     token: string;
 }
 
+/* It receives an email and password, checks if the user exists, checks if the password matches, and
+returns a token and the user */
 class AuthUserService{
     public async execute({email, password}: Request): Promise<Response> {
         const userRepo = getRepository(User);

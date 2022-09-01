@@ -1,6 +1,8 @@
 import { Router } from "express";
 import ensureAutheticated from "../middlewares/ensureAutheticated";
-import { createSubTask, createTag, createTask, deleteSubTask, deleteTag, deleteTask, getTags, getTasks, getTasksByTag, updateSubTask, updateTag, updateTask } from "../controller/taskController";
+import { createTask, deleteTask, getTasks, getTasksByTag, updateTask } from "../controller/taskController";
+import { getTags, updateTag, createTag, deleteTag } from "../controller/tagController"
+import { createSubTask, deleteSubTask, updateSubTask } from "../controller/subtaskController"
 
 
 const taskRouter = Router();
@@ -9,10 +11,9 @@ taskRouter.use(ensureAutheticated)
 // Route to get tasks
 taskRouter.get("/", getTasks);
 taskRouter.get("/tag", getTags)
-taskRouter.get("/tag/:tagId", getTasksByTag)
 // Routes to create data (task, subtask)
 taskRouter.post("/", createTask);
-taskRouter.post("/:taskId/subtask", createSubTask); 
+taskRouter.post("/:taskId/subtask", createSubTask);
 taskRouter.post("/tag", createTag);
 // Routes to update data (task, subtask)
 taskRouter.patch("/:id", updateTask);
