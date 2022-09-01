@@ -139,7 +139,7 @@
             }
         },
         "/user/change-password": {
-            "post": {
+            "patch": {
                 "tags": ["User"],
                 "summary": "Change password",
                 "description": "Change the user password",
@@ -171,7 +171,7 @@
                 }
             }
         },
-        "/task/create": {
+        "/task/": {
             "post": {
                 "tags": ["Task"],
                 "summary": "Create a task",
@@ -206,9 +206,7 @@
                       "bearerAuth": []
                     }
                   ]
-            }
-        },
-        "/task": {
+            },
             "get": {
                 "tags": ["Task"],
                 "summary": "List the tasks created",
@@ -229,6 +227,14 @@
                       "schema": {
                         "type": "integer"
                       }
+                    },
+                    {
+                        "in": "query",
+                        "name": "tag",
+                        "description": "Get tasks by a tag",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                   ],
                 "security": [
@@ -237,8 +243,9 @@
                     }
                   ]
             }
+
         },
-        "/task/:id": {
+        "/task/{taskId}": {
             "patch": {
                 "tags": ["Task"],
                 "summary": "Update a task",
@@ -254,6 +261,344 @@
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "taskId",
+                        "required": true,
+                        "description": "Id of a task",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "schema":   {
+                                "type": "object",
+                                "description": "Vê se está funcionando",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    },
+                                    "tagId": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "To do coffe",
+                                    "status": "Done",
+                                    "tagId": "uuid"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "delete": {
+                "tags": ["Task"],
+                "summary": "Delete a task",
+                "description": "Delete a task by the id given",
+                "responses": {
+                    "202": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Task not found"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "taskId",
+                        "required": true,
+                        "description": "Id of a task",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/task/tag/": {
+            "post": {
+                "tags": ["Tag"],
+                "summary": "Create a tag",
+                "description": "Create a tag indo the database",
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "schema":   {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "to study"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "get": {
+                "tags": ["Tag"],
+                "summary": "List the tags created",
+                "description": "List the tags created of the user logged",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "description": "Id of a tag",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                  ],
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/task/tag/{tagId}": {
+            "patch": {
+                "tags": ["Tag"],
+                "summary": "Update a tag",
+                "description": "Update a tag by the id given",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Tag not found"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "required": true,
+                        "description": "Id of a tag",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "schema":   {
+                                "type": "object",
+                                "description": "Vê se está funcionando",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "Work"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "delete": {
+                "tags": ["Tag"],
+                "summary": "Delete a tag",
+                "description": "Delete a tag by the id given",
+                "responses": {
+                    "202": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Tag not found"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "required": true,
+                        "description": "Id of a tag",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/task/{taskId}/subtask": {
+            "post": {
+                "tags": ["Subtask"],
+                "summary": "Create a subtask",
+                "description": "Create a subtask indo the database",
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "schema":   {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "To do coffe"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/task/subtask/{subtaskId}": {
+            "patch": {
+                "tags": ["Subtask"],
+                "summary": "Update a subtask",
+                "description": "Update a subtask by the id given",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Subtask not found"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "required": true,
+                        "name": "SubtaskId",
+                        "description": "Id of a Subtask",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "schema":   {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "To do coffe"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "delete": {
+                "tags": ["Subtask"],
+                "summary": "Delete a subtask",
+                "description": "Delete a subtask by the id given",
+                "responses": {
+                    "202": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Subtask not found"
+                    },
+                    "500": {
+                        "description": "JWT token is missing or Invalid JWT token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "SubtaskId",
+                        "required": true,
+                        "description": "Id of a subtask",
+                        "schema": {
+                            "type": "string"
+                          }
+                    }
+                ],
                 "security": [
                     {
                       "bearerAuth": []
@@ -261,7 +606,7 @@
                   ]
             }
         }
-    },
+        },
     "components": {
     "securitySchemes": {
         "bearerAuth": {
