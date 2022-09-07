@@ -19,6 +19,7 @@ interface Response {
 class CreateUserService {
     public async execute({name, email, password}: Request): Promise<Response>{
         const userRepo = getRepository(User);
+        const secret = process.env.SECRET ?? "";
         const checkUserEmailExist = await userRepo.findOne({
             where: {email}
         })
@@ -38,7 +39,7 @@ class CreateUserService {
 
         delete user.password;
 
-        const { expiresIn, secret } = auth.jwt
+        const { expiresIn } = auth.jwt
 
         const token = sign({ }, secret, {
             subject: user.id,

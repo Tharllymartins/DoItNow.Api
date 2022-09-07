@@ -5,6 +5,7 @@ import auth from "../config/auth";
 
 export default function ensureAutheticated(req: Request, res: Response, next: NextFunction): void{
     const authHeader = req.headers.authorization;
+    const secret = process.env.SECRET ?? ""
 
     if (!authHeader){
         throw new Error("JWT token is missing")
@@ -12,7 +13,7 @@ export default function ensureAutheticated(req: Request, res: Response, next: Ne
 
     const [, token] = authHeader.split(' ');
     try {
-        const decoded = verify(token, auth.jwt.secret) as JwtPayload;
+        const decoded = verify(token, secret) as JwtPayload;
         const { sub } = decoded
 
         req.user = {

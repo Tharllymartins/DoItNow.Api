@@ -19,6 +19,7 @@ returns a token and the user */
 class AuthUserService{
     public async execute({email, password}: Request): Promise<Response> {
         const userRepo = getRepository(User);
+        const secret = process.env.SECRET ?? ""
         const user = await userRepo.findOne({
             where: { email }
         })
@@ -33,7 +34,7 @@ class AuthUserService{
             throw new Error("Incorrect e-mail/password");
         }
         
-        const { expiresIn, secret } = auth.jwt
+        const { expiresIn } = auth.jwt
 
         const token = sign({ }, secret, {
             subject: user.id,
