@@ -1,6 +1,7 @@
 import {getRepository} from "typeorm";
 import User from "../../models/User";
 import { compare, hash } from "bcryptjs";
+import AppError from "../../error/AppError";
 
 
 interface Request {
@@ -21,13 +22,13 @@ export default class ChangeUserPasswordService {
     })
 
     if(!user) {
-        throw new Error("This e-mail doesn't exist!")
+        throw new AppError("User not found")
     }
 
     const currentPasswordMatch = await compare(currentPassword, user.password!)
 
     if(!currentPasswordMatch) {
-        throw new Error("Password doesn't match")
+        throw new AppError("Current password is incorrect")
     }
 
     const hashedNewPassword = await hash(newPassword, 8);

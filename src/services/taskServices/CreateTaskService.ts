@@ -1,4 +1,5 @@
 import { getRepository } from "typeorm"
+import AppError from "../../error/AppError";
 import Tag from "../../models/Tag";
 import Task from "../../models/Task";
 
@@ -28,11 +29,11 @@ export default class CreateTaskService {
         })
 
         if (!userExist){
-            throw new Error("User does not exist!")
+            throw new AppError("User does not exist!")
         }
 
         if (!tagExist) {
-            throw new Error("Tag does not exist")
+            throw new AppError("Tag does not exist")
         }
 
         const task = taskRepo.create({

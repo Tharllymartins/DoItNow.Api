@@ -3,6 +3,7 @@ import { hash } from "bcryptjs";
 import User from "../../models/User";
 import auth from "../../config/auth";
 import {sign} from "jsonwebtoken";
+import AppError from "../../error/AppError";
 
 interface Request{
     name: string;
@@ -25,7 +26,7 @@ class CreateUserService {
         })
 
         if (checkUserEmailExist){
-            throw new Error("User e-mail already exist!");
+            throw new AppError("User e-mail already exist!");
         }
         const hashedPassword = await hash(password, 8)
 

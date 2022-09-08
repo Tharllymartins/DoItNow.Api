@@ -96,7 +96,10 @@
                         "description": "Success"
                     },
                     "400": {
-                        "description": "Bad Request"
+                        "description": "Invalid JWT token"
+                    },
+                    "401": {
+                        "description": "JWT token is missing"
                     }
                 },
                 "security": [
@@ -133,7 +136,7 @@
                         "description": "Success"
                     },
                     "400": {
-                        "description": "This e-mail doesn't exist!"
+                        "description": "User not found"
                     }
                 }
             }
@@ -167,9 +170,17 @@
                     },
                     "400": {
                         "description": "Current password is incorrect"
+                    },
+                    "401": {
+                        "description": "JWT token is missing"
                     }
                 }
-            }
+            },
+            "security": [
+                {
+                  "bearerAuth": []
+                }
+              ]
         },
         "/task/": {
             "post": {
@@ -197,8 +208,11 @@
                     "201": {
                         "description": "Created"
                     },
-                    "500": {
-                        "description": "JWT token is missing or Invalid JWT token"
+                    "400": {
+                        "description": "Invalid JWT token"
+                    },
+                    "401": {
+                        "description": "JWT token is missing"
                     }
                 },
                 "security": [
@@ -215,8 +229,11 @@
                     "200": {
                         "description": "Success"
                     },
-                    "500": {
-                        "description": "JWT token is missing or Invalid JWT token"
+                    "400": {
+                        "description": "Invalid JWT token"
+                    },
+                    "401": {
+                        "description": "JWT token is missing"
                     }
                 },
                 "parameters": [
@@ -257,7 +274,7 @@
                     "400": {
                         "description": "Task not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -315,7 +332,7 @@
                     "400": {
                         "description": "Task not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -363,7 +380,10 @@
                     "201": {
                         "description": "Created"
                     },
-                    "500": {
+                    "400": {
+                        "description": "Tag not found"
+                    },
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -381,8 +401,11 @@
                     "200": {
                         "description": "Success"
                     },
-                    "500": {
-                        "description": "JWT token is missing or Invalid JWT token"
+                    "400": {
+                        "description": "Invalid JWT token"
+                    },
+                    "401":{
+                        "description": "JWT token is missing"
                     }
                 },
                 "parameters": [
@@ -414,7 +437,7 @@
                     "400": {
                         "description": "Tag not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -464,7 +487,7 @@
                     "400": {
                         "description": "Tag not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -523,7 +546,10 @@
                     "201": {
                         "description": "Created"
                     },
-                    "500": {
+                    "400": {
+                        "description": "Subtask not found"
+                    },
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -546,7 +572,7 @@
                     "400": {
                         "description": "Subtask not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
@@ -595,7 +621,7 @@
                     "400": {
                         "description": "Subtask not found"
                     },
-                    "500": {
+                    "401": {
                         "description": "JWT token is missing or Invalid JWT token"
                     }
                 },
