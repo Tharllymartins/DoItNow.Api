@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany, JoinTable } from 'typeorm';
-import tagRouter from '../routes/tag.routes';
 import SubTask from './SubTask';
 import Tag from './Tag';
 import User from './User';
@@ -13,7 +12,7 @@ class Task {
     tagId: string;
 
     @ManyToOne(() => Tag, tags => tags.tasks, {eager: true})
-    tag?: Tag[];
+    tag?: Tag;
 
     @Column()
     user_id?: string;

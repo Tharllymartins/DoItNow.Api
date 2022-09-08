@@ -1,4 +1,8 @@
-# To do API
+# Do It Now API
+
+---
+
+Do It Now is a to do list API which the user can signup to save yours tasks, login, create task, subtasks and tags to a better organization of your space
 
 ---
 ## Requirements
@@ -43,15 +47,15 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Install
 
-    $ git clone https://github.com/Tharllymartins/todo-api.git
-    $ cd todo-api
+    $ git clone https://github.com/Tharllymartins/doItNow.Api.git
+    $ cd doItNow.Api
     $ yarn install
 
 ## Configure app
 
-Open `todo-api/ormconfig.json` then edit it with your settings to connect a database.
+### Docker installed to run locally;
 
-- Docker installed to run locally;
+    $ docker-compose up
 
 ## Running the project local
 

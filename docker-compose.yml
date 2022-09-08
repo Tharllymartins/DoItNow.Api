@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: kartoza/postgis:12.1
+    shm_size: '2gb'
+    ports:
+      - 5432:5432
+    volumes:
+      - ../todo-Api-data/postgresql:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DBNAME=todo
+      - POSTGRES_USER=todo
+      - POSTGRES_PASS=todopass

@@ -1,14 +1,17 @@
 import { getRepository } from 'typeorm';
-import User from '../models/User';
+import User from '../../models/User';
 import path from 'path';
-import uploadConfig from '../config/upload'
+import uploadConfig from '../../config/upload'
 import fs from 'fs';
+import AppError from '../../error/AppError';
 
 interface Request {
     user_id?: string;
     avatarFileName?: string;
 }
 
+/* This class is responsible for updating the user avatar, and it does so by finding the user, deleting
+the old avatar, and saving the new avatar. */
 class UpdatedUserAvatarService {
     public async execute({ user_id, avatarFileName }: Request): Promise<User>{
         const userRepo = getRepository(User);
@@ -16,7 +19,7 @@ class UpdatedUserAvatarService {
         const user = await userRepo.findOne(user_id);
 
         if (!user){
-            throw new Error('Only autheticated user can change avatar');
+            throw new AppError('User not found!');
         }
 
         if (user.avatar) {

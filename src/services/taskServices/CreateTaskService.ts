@@ -1,5 +1,7 @@
 import { getRepository } from "typeorm"
-import Task from "../models/Task";
+import AppError from "../../error/AppError";
+import Tag from "../../models/Tag";
+import Task from "../../models/Task";
 
 
 interface Request {
@@ -8,9 +10,11 @@ interface Request {
     tagId?: string;
 }
 
+/* It creates a task and saves it to the database */
 export default class CreateTaskService {
     public async execute({ name, id, tagId }: Request): Promise<Task>{
         const taskRepo = getRepository(Task)
+        const tagRepo = getRepository(Tag)
 
         const userExist = taskRepo.findOne({
             where: {
@@ -18,8 +22,18 @@ export default class CreateTaskService {
             }
         });
 
+        const tagExist = tagRepo.findOne({
+            where: {
+                id: tagId
+            }
+        })
+
         if (!userExist){
-            throw new Error("User does not exist!")
+            throw new AppError("User does not exist!")
+        }
+
+        if (!tagExist) {
+            throw new AppError("Tag does not exist")
         }
 
         const task = taskRepo.create({
