@@ -3,6 +3,7 @@ import User from "../../models/User";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { hash } from "bcryptjs";
+import AppError from "../../error/AppError";
 
 
 interface Request {
@@ -21,7 +22,7 @@ export default class ForgotUserPassword {
     })
 
     if(!user) {
-        throw new Error("This e-mail doesn't exist!")
+        throw new AppError("This e-mail doesn't exist!")
     }
 
     const transport = nodemailer.createTransport({

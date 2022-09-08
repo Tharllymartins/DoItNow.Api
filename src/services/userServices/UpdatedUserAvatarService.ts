@@ -3,6 +3,7 @@ import User from '../../models/User';
 import path from 'path';
 import uploadConfig from '../../config/upload'
 import fs from 'fs';
+import AppError from '../../error/AppError';
 
 interface Request {
     user_id?: string;
@@ -18,7 +19,7 @@ class UpdatedUserAvatarService {
         const user = await userRepo.findOne(user_id);
 
         if (!user){
-            throw new Error('Only autheticated user can change avatar');
+            throw new AppError('User not found!');
         }
 
         if (user.avatar) {
